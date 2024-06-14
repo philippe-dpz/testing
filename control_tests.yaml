@@ -1,28 +1,27 @@
-name: Pytest & flake8 control Push
-
-on:
-  push:
-    branches:
-      - main  # Adapter la branche principale de votre dépôt si nécessaire
-
+name: Control Push
+on: push
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
+  qa:
+    name: Check tests
+    runs-on: ubuntu-20.04
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Checkout on master
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@master
         with:
-          python-version: '3.x'  # Remplacez 'x' par la version de Python que vous utilisez
+          python-version: "3.x"
 
-      - name: Install dependencies
+      - name: Install pytest and flake8
         run: |
-          python -m pip install --upgrade pip
           pip install pytest
+          pip install flake8
 
-      - name: Run pytest
+      - name: Run tests
         run: |
-          pytest file_test.py
+          pytest
+
+      - name: Run flake8
+        uses: py-actions/flake8@v2
+
